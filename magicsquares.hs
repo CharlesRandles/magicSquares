@@ -1,3 +1,5 @@
+module MagicSquares where
+
 import Data.List (transpose)
 
 type Square = [[Int]]
