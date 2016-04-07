@@ -13,8 +13,10 @@ showSquare rs = concat [showElems r ++ lf | r <- rs]
 showElems :: (Show a) => [a] => String
 showElems xs = concat [(show x) ++ tab | x <- xs]
 
+printSquare :: Square -> IO ()
+printSquare square = putStrLn $ showSquare square
+
 --Constructors and aaccessors
-makeSquare :: Int -> [Int] -> Square
 size :: Square -> Int
 rows :: Square -> [[Int]]
 cols :: Square -> [[Int]]
@@ -30,8 +32,15 @@ diags rs = [[((rs!!)n!!)n | n <- [0..(size rs) - 1]] ,
 
 allLines s = rows s ++ cols s ++ diags s
 
-makeSquare _ [] =  []
-makeSquare n xs =  (take n xs): (makeSquare n (drop n xs))
+makeSquareOfSize :: Int -> [Int] -> [[Int]]
+makeSquareOfSize _ [] = []
+makeSquareOfSize n xs = (take n xs) : (makeSquareOfSize n (drop n xs))
+
+makeSquare :: [Int] -> [[Int]]
+makeSquare xs = makeSquareOfSize (floor
+                                  $ sqrt
+                                  $ fromIntegral
+                                  $ length xs) xs
 
 --Utility Function
 allEqual :: (Eq a) => [a] -> Bool
@@ -73,10 +82,10 @@ canComplete :: Square -> Bool
 canComplete = isMagic.completePartial
 
 --Test data
-ts1 = makeSquare 3 [8, 1, 6, 3, 5, 7, 4, 9, 2]
-ts2 = makeSquare 3 [2, 7, 6, 9, 5, 1, 4, 3, 8]
-ts3 = makeSquare 3 [3, 5, 7, 8, 1, 6, 4, 9, 2]
-ts4 = makeSquare 3 [8, 1, 6, 7, 5, 3, 4, 9, 2]
+ts1 = makeSquare [8, 1, 6, 3, 5, 7, 4, 9, 2]
+ts2 = makeSquare [2, 7, 6, 9, 5, 1, 4, 3, 8]
+ts3 = makeSquare [3, 5, 7, 8, 1, 6, 4, 9, 2]
+ts4 = makeSquare [8, 1, 6, 7, 5, 3, 4, 9, 2]
 
 ps1 = [[8,1], [3,5], [4,9]]::[[Int]]
 ps2= [[3,5], [8,1], [4,9]]::[[Int]]
